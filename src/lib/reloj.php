@@ -4,22 +4,25 @@ namespace Lib;
 
 class Reloj {
 
-  private $logger;
+  private $ip;
+  private $port;
 
-  public function __construct($logger){
-    $this->logger = $logger;
+  public function __construct($ip, $port = 4370){
+    $this->ip = $ip;
+    $this->port = $port;
   }
 
-  public function get($ip, $port = 4370){
-    $zk = new ZKLib($ip, $port);
+  public function get(){
+    $zk = new \ZKLib($this->ip, $this->port);
     $ret = $zk->connect();
+    sleep(1);
     if($ret){
         $zk->disableDevice();
         sleep(1);
     }
 
     $attendance = $zk->getAttendance();
-    //$reloj_serie = $zk->serialNumber();
+    $relojSerie = explode("=", $zk->serialNumber())[1];
     sleep(1);
     $rows = array();
     while(list($idx, $attendancedata) = each($attendance)){
@@ -28,7 +31,8 @@ class Reloj {
 
         array_push($rows, array(
             "codigo" => $codigo,
-            "fecha_hora" => $fechaHora
+            "fecha_hora" => $fechaHora,
+	    "reloj_serie" => $relojSerie
         ));
     }
     $zk->enableDevice();
@@ -36,6 +40,23 @@ class Reloj {
     $zk->disconnect();
 
     return $rows;
+  }
+
+  public function setUser($uid, $userid, $nombre){
+    $zk = new \ZKLib($this->ip, $this->port);
+    $ret = $zk->connect();
+    sleep(1);
+    if($ret){
+        $zk->disableDevice();
+        sleep(1);
+    }
+
+    //$zk->enrollUser($uid);
+    $zk->setUser($uid, $userId, $nombre, '', LEVEL_USER);
+
+    $zk->enableDevice();
+    sleep(1);
+    $zk->disconnect();
   }
 }
 

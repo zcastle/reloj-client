@@ -3,9 +3,17 @@
 use Slim\Http\Request;
 use Slim\Http\Response;
 //
+//use \ZKLib\ZKLib;
+//
 use Lib\Reloj;
 use Lib\Data;
 // Routes
+
+$app->get("/crear", function(){
+	$reloj = new Reloj("10.10.10.250");
+	echo $reloj->setUser(69, 96, "jc");
+	echo "crear";
+});
 
 $app->group("/reloj/v1", function(\Slim\App $app){
 
@@ -14,10 +22,10 @@ $app->group("/reloj/v1", function(\Slim\App $app){
         $return = array("success" => true, "message" => null);
 
         $rows = array();
-        if(false){
+        if(true){
             try{
-                $reloj = new Reloj();
-                $rows = $reloj->get("192.168.2.19");
+                $reloj = new Reloj("10.10.10.250");
+                $rows = $reloj->get();
             }catch(Exception $e){
                 $return["message"] = "Error desconocido";
             }
@@ -30,6 +38,8 @@ $app->group("/reloj/v1", function(\Slim\App $app){
                 ));
             }
         }
+
+	//$return["data"] = $rows;
 
         $data = new Data($this->db, $this->logger);
         foreach($rows AS $row){

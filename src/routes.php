@@ -9,11 +9,16 @@ use Lib\Reloj;
 use Lib\Data;
 // Routes
 
-$app->get("/crear", function(){
-	$reloj = new Reloj("10.10.10.250");
-	echo $reloj->setUser(69, 96, "jc");
+/*$app->get("/crear", function(){
+	$reloj = new Reloj("192.168.0.250");
+	echo $reloj->setUser(5001, 5001, "MAS");
 	echo "crear";
 });
+
+$app->get("/test", function(){
+    $st = "000001003433303439353830000000000000000000000000000000000189b5bb24000000000000";
+	echo intval( str_replace("\0", '', hex2bin( substr($st, 6, 22) ) ) );
+});*/
 
 $app->group("/reloj/v1", function(\Slim\App $app){
 
@@ -24,7 +29,8 @@ $app->group("/reloj/v1", function(\Slim\App $app){
         $rows = array();
         if(true){
             try{
-                $reloj = new Reloj("10.10.10.250");
+                //$reloj = new Reloj("10.10.10.250");
+                $reloj = new Reloj("192.168.0.250");
                 $rows = $reloj->get();
             }catch(Exception $e){
                 $return["message"] = "Error desconocido";
@@ -39,7 +45,7 @@ $app->group("/reloj/v1", function(\Slim\App $app){
             }
         }
 
-	//$return["data"] = $rows;
+	    //$return["data"] = $rows;
 
         $data = new Data($this->db, $this->logger);
         foreach($rows AS $row){
@@ -80,4 +86,16 @@ $app->group("/reloj/v1", function(\Slim\App $app){
 
         return $response->withJson($result);
     });
+
+    /*$app->post("/create", function(Request $request, Response $response, $args){
+        $result = array("success" => true);
+
+        $body = $request->getParsedBody();
+
+        $reloj = new Reloj("10.10.10.250");
+        //$reloj->setUser(69, 96, "jc");
+        $reloj->setUser($body["id"], $body["codigo"], $body["nombre"]);
+        
+        return $response->withJson($result);
+    });*/
 });

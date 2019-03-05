@@ -28,13 +28,20 @@ class Reloj {
     while(list($idx, $attendancedata) = each($attendance)){
         $codigo = $attendancedata[1];
         $fechaHora = date("Y-m-d H:i:s", strtotime($attendancedata[3]));
+        
+        //array_push($rows, $attendancedata);
 
         array_push($rows, array(
-            "codigo" => $codigo,
-            "fecha_hora" => $fechaHora,
-	    "reloj_serie" => $relojSerie
+          "codigo" => $codigo,
+          "fecha_hora" => $fechaHora,
+          "reloj_serie" => $relojSerie
         ));
     }
+    /*$user = $zk->getUser();
+    sleep(1);
+    while(list($uid, $userdata) = each($user)){
+      array_push($rows, $userdata);
+    }*/
     $zk->enableDevice();
     sleep(1);
     $zk->disconnect();
@@ -42,7 +49,7 @@ class Reloj {
     return $rows;
   }
 
-  public function setUser($uid, $userid, $nombre){
+  public function setUser($uid, $userId, $nombre){
     $zk = new \ZKLib($this->ip, $this->port);
     $ret = $zk->connect();
     sleep(1);

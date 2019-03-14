@@ -38,6 +38,7 @@ $app->group("/reloj/v1", function(\Slim\App $app){
                     $data->insertarRegistro($row["codigo"], $row["reloj_serie"], $row["fecha_hora"]);
                 }
             }
+            $reloj->clear();
             $reloj->close();
 
         }catch(Exception $e){

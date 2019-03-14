@@ -43,6 +43,10 @@ class Reloj {
     return $rows;
   }
 
+  public function clear(){
+    $this->zk->clearAttendance();
+  }
+
   public function close(){
     $this->zk->enableDevice();
     sleep(1);

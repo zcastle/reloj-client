@@ -79,7 +79,10 @@
                 $u1 = hexdec( substr($u[1], 4, 2) );
                 $u2 = hexdec( substr($u[1], 6, 2) );
                 $uid = $u1+($u2*256);
+                //$uid = trim(substr( $attendancedata, 4, 14 ), "\x0");
+
                 $id = intval( str_replace("\0", '', hex2bin( substr($u[1], 6, 50) ) ) );
+                //$id = trim(substr( $attendancedata, 4, 14 ), "\x0");
                 $state = hexdec( substr( $u[1], 56, 2 ) );
                 $timestamp = decode_time( hexdec( reverseHex( substr($u[1], 58, 8) ) ) ); 
                 

@@ -23,37 +23,30 @@ $app->get("/test", function(){
 $app->group("/reloj/v1", function(\Slim\App $app){
 
     $app->get('/get', function(Request $request, Response $response, $args) {
-        //$this->logger->info("Slim-Skeleton '/' route");
         $return = array("success" => true, "message" => null);
 
-        $rows = array();
-        if(true){
-            try{
-                //$reloj = new Reloj("10.10.10.250");
-                $reloj = new Reloj("192.168.0.250");
-                $rows = $reloj->get();
-            }catch(Exception $e){
-                $return["message"] = "Error desconocido";
-            }
-        }else{
-            for ($i=1; $i <= 5; $i++) { 
-                array_push($rows, array(
-                    "codigo" => $i,
-                    "reloj_serie" => "serialNumber",
-                    "fecha_hora" => date("Y-m-d H:i:s")
-                ));
-            }
-        }
+        $reloj = null;
+        try{
+            $reloj = new Reloj("192.168.1.201"); // 201-PRIMAVERA 10.10.10.250-ANGAMOS
+            $rows = $reloj->get();
+        
+            //$return["data"] = $rows;
 
-	    //$return["data"] = $rows;
-
-        $data = new Data($this->db, $this->logger);
-        foreach($rows AS $row){
-            if(!$data->existeRegistro($row["codigo"], $row["reloj_serie"], $row["fecha_hora"])){
-                $data->insertarRegistro($row["codigo"], $row["reloj_serie"], $row["fecha_hora"]);
+            $data = new Data($this->db, $this->logger);
+            foreach($rows AS $row){
+                if(!$data->existeRegistro($row["codigo"], $row["reloj_serie"], $row["fecha_hora"])){
+                    $data->insertarRegistro($row["codigo"], $row["reloj_serie"], $row["fecha_hora"]);
+                }
             }
-        }
+            $reloj->close();
 
+        }catch(Exception $e){
+            $return["message"] = $e->getMessage();
+        }finally(
+            if($reloj != null){
+                $reloj->close();
+            }
+        )
         return $response->withJson($return);
     });
 

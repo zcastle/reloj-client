@@ -4,25 +4,22 @@ namespace Lib;
 
 class Reloj {
 
-  private $ip;
-  private $port;
+  private $zk;
 
   public function __construct($ip, $port = 4370){
-    $this->ip = $ip;
-    $this->port = $port;
+    $this->zk = new \ZKLib($ip, $port);
   }
 
   public function get(){
-    $zk = new \ZKLib($this->ip, $this->port);
-    $ret = $zk->connect();
+    $ret = $this->zk->connect();
     sleep(1);
     if($ret){
-        $zk->disableDevice();
+        $this->zk->disableDevice();
         sleep(1);
     }
 
-    $attendance = $zk->getAttendance();
-    $relojSerie = explode("=", $zk->serialNumber())[1];
+    $attendance = $this->zk->getAttendance();
+    $relojSerie = explode("=", $this->zk->serialNumber())[1];
     sleep(1);
     $rows = array();
     while(list($idx, $attendancedata) = each($attendance)){
@@ -42,11 +39,14 @@ class Reloj {
     while(list($uid, $userdata) = each($user)){
       array_push($rows, $userdata);
     }*/
-    $zk->enableDevice();
-    sleep(1);
-    $zk->disconnect();
-
+    
     return $rows;
+  }
+
+  public function close(){
+    $this->zk->enableDevice();
+    sleep(1);
+    $this->zk->disconnect();
   }
 
   public function setUser($uid, $userId, $nombre){

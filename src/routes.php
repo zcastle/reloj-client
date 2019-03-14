@@ -42,11 +42,11 @@ $app->group("/reloj/v1", function(\Slim\App $app){
 
         }catch(Exception $e){
             $return["message"] = $e->getMessage();
-        }finally(
+        }finally{
             if($reloj != null){
                 $reloj->close();
             }
-        )
+        }
         return $response->withJson($return);
     });
 

@@ -28,8 +28,13 @@ class Data {
     return $this->db->table('marcacion')->select("codigo","reloj_serie","fecha_hora")->where("fecha_enviado", null)->skip(0)->take(100)->get();
   }
 
-  public function setEnviado(){
-    $this->db->table('marcacion')->where("fecha_enviado", null)->update(['fecha_enviado' => date("Y-m-d H:i:s")]);
+  public function setEnviado($codigo, $reloj_serie, $fecha_hora){
+    $this->db->table('marcacion')
+          ->where("codigo", $codigo)
+          ->where("reloj_serie", $reloj_serie)
+          ->where("fecha_hora", $fecha_hora)
+          ->where("fecha_enviado", null)
+          ->update(['fecha_enviado' => date("Y-m-d H:i:s")]);
   }
 }
 

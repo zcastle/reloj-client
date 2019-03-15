@@ -69,7 +69,9 @@ $app->group("/reloj/v1", function(\Slim\App $app){
                 ->send();
 
             if(!$res->body->error){
-                $data->setEnviado();
+                foreach($rows AS $row){
+                    $data->setEnviado($row->codigo, $row->reloj_serie, $row->fecha_hora);
+                }
                 $result["message"] = "Sincronizado correctamente $count registros";
             } else {
                 $result["message"] = $res->body->message;

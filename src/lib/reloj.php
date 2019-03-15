@@ -54,20 +54,16 @@ class Reloj {
   }
 
   public function setUser($uid, $userId, $nombre){
-    $zk = new \ZKLib($this->ip, $this->port);
-    $ret = $zk->connect();
+    $ret = $this->zk->connect();
     sleep(1);
     if($ret){
-        $zk->disableDevice();
+        $this->zk->disableDevice();
         sleep(1);
     }
 
-    //$zk->enrollUser($uid);
+    $zk->enrollUser($uid);
     $zk->setUser($uid, $userId, $nombre, '', LEVEL_USER);
 
-    $zk->enableDevice();
-    sleep(1);
-    $zk->disconnect();
   }
 }
 

@@ -25,8 +25,7 @@ class Data {
   }
 
   public function getData(){
-    //->skip(0)->take(10)
-    return $this->db->table('marcacion')->select("codigo","reloj_serie","fecha_hora")->where("fecha_enviado", null)->get();
+    return $this->db->table('marcacion')->select("codigo","reloj_serie","fecha_hora")->where("fecha_enviado", null)->skip(0)->take(100)->get();
   }
 
   public function setEnviado(){

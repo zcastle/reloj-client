@@ -61,7 +61,7 @@ $app->group("/reloj/v1", function(\Slim\App $app){
         if($count > 0){
             $body["data"] = base64_encode($rows);
 
-            $url = "http://localhost:8181/reloj/v1/server";
+            $url = "http://190.40.109.228:8181/reloj/v1/";
             $res = \Httpful\Request::post($url)
                 ->expectsJson()
                 ->sendsJson()

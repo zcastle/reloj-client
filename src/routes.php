@@ -34,8 +34,8 @@ $app->group("/reloj/v1", function(\Slim\App $app){
 
             $data = new Data($this->db, $this->logger);
             foreach($rows AS $row){
-                if(!$data->existeRegistro($row["codigo"], $row["reloj_serie"], $row["fecha_hora"])){
-                    $data->insertarRegistro($row["codigo"], $row["reloj_serie"], $row["fecha_hora"]);
+                if(!$data->existeRegistro($row)){
+                    $data->insertarRegistro($row);
                 }
             }
             $reloj->clear();
@@ -70,7 +70,7 @@ $app->group("/reloj/v1", function(\Slim\App $app){
 
             if(!$res->body->error){
                 foreach($rows AS $row){
-                    $data->setEnviado($row->codigo, $row->reloj_serie, $row->fecha_hora);
+                    $data->setEnviado((array) $row);
                 }
                 $result["message"] = "Sincronizado correctamente $count registros";
             } else {

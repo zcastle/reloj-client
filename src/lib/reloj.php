@@ -24,12 +24,18 @@ class Reloj {
     $rows = array();
     while(list($idx, $attendancedata) = each($attendance)){
         $codigo = $attendancedata[1];
+        $status = "I";
+        if ($attendancedata[2] == 14){
+          $status = "O";
+        }
+        else
         $fechaHora = date("Y-m-d H:i:s", strtotime($attendancedata[3]));
         
         //array_push($rows, $attendancedata);
 
         array_push($rows, array(
           "codigo" => $codigo,
+          "estado" => $status,
           "fecha_hora" => $fechaHora,
           "reloj_serie" => $relojSerie
         ));

@@ -27,18 +27,18 @@ $app->group("/reloj/v1", function(\Slim\App $app){
 
         $reloj = null;
         try{
-            $reloj = new Reloj("192.168.1.201"); // 201-PRIMAVERA 10.10.10.250-ANGAMOS
+            $reloj = new Reloj("10.10.10.250"); // 201-PRIMAVERA 10.10.10.250-ANGAMOS
             $rows = $reloj->get();
         
-            //$return["data"] = $rows;
+            $return["data"] = $rows;
 
-            $data = new Data($this->db, $this->logger);
+            /*$data = new Data($this->db, $this->logger);
             foreach($rows AS $row){
                 if(!$data->existeRegistro($row)){
                     $data->insertarRegistro($row);
                 }
-            }
-            $reloj->clear();
+            }*/
+            //$reloj->clear();
             $reloj->close();
 
         }catch(Exception $e){

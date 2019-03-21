@@ -18,8 +18,9 @@ class Reloj {
         sleep(1);
     }
 
-    $attendance = $this->zk->getAttendance();
     $relojSerie = explode("=", $this->zk->serialNumber())[1];
+    //$relojSerie = $this->zk->serialNumber();
+    $attendance = $this->zk->getAttendance();
     sleep(1);
     $rows = array();
     while(list($idx, $attendancedata) = each($attendance)){

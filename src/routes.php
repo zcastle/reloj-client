@@ -22,22 +22,33 @@ $app->get("/test", function(){
 
 $app->group("/reloj/v1", function(\Slim\App $app){
 
+    $app->get('/test', function(Request $request, Response $response, $args) {
+        $u = "0000da0e34343030343938330000000000000000000000000000000001e308d224010000000000";
+        echo str_replace("\0", '', hex2bin( substr($u, 6, 50) ) );
+    });
+
     $app->get('/get', function(Request $request, Response $response, $args) {
         $return = array("success" => true, "message" => null);
 
         $reloj = null;
         try{
-            $reloj = new Reloj("10.10.10.250"); // 201-PRIMAVERA 10.10.10.250-ANGAMOS
+            $reloj = new Reloj("192.168.1.201"); // 201-PRIMAVERA 10.10.10.250-ANGAMOS
             $rows = $reloj->get();
         
-            $return["data"] = $rows;
-
-            /*$data = new Data($this->db, $this->logger);
-            foreach($rows AS $row){
-                if(!$data->existeRegistro($row)){
-                    $data->insertarRegistro($row);
-                }
-            }*/
+            //$return["data"] = $rows;
+	    $return["message"] = "Total marcaciones descargadas: " . count($rows);
+	    
+	    $registradas = 0;
+	    if(count($rows) > 0){
+	        $data = new Data($this->db, $this->logger);
+          	foreach($rows AS $row){
+	            if(!$data->existeRegistro($row)){
+			$registradas++;
+                    	$data->insertarRegistro($row);
+                    }
+            	}
+	    }
+	    $return["message"] = $return["message"] . ", total marcaciones registradas: " . $registradas;
             //$reloj->clear();
             $reloj->close();
 

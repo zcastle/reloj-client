@@ -70,7 +70,6 @@
             while ( strlen($attendancedata) > 40 ) {
                 
                 $u = unpack( 'H78', substr( $attendancedata, 0, 40 ) );
-		// H78
                 //24s1s4s11s
                 //print_r($u);
 
@@ -81,7 +80,7 @@
                 $u2 = hexdec( substr($u[1], 6, 2) );
                 $uid = $u1+($u2*256);
                 //$id = intval( str_replace("\0", '', hex2bin( substr($u[1], 6, 50) ) ) );
-		$id = str_replace("\0", '', hex2bin( substr($u[1], 6, 18) ) );
+		        $id = str_replace("\0", '', hex2bin( substr($u[1], 6, 18) ) );
                 $state = hexdec( substr( $u[1], 56, 2 ) );
                 $timestamp = decode_time( hexdec( reverseHex( substr($u[1], 58, 8) ) ) ); 
                 

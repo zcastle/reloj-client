@@ -3,13 +3,9 @@
 use Slim\Http\Request;
 use Slim\Http\Response;
 //
-//use \ZKLib\ZKLib;
-//
 use Lib\Reloj;
 use Lib\Data;
 // Routes
-use \ZKLib\ZKLib;
-use \ZKLib\User;
 
 /*$app->get("/crear", function(){
 	$reloj = new Reloj("192.168.0.250");
@@ -22,7 +18,7 @@ $app->get("/test", function(){
 	echo intval( str_replace("\0", '', hex2bin( substr($st, 6, 22) ) ) );
 });*/
 
-$app->get("/test02", function(){
+/*$app->get("/test02", function(){
     $zk = new ZKLib('192.168.1.201');
     $ret = $zk->connect();
     if ($ret){
@@ -33,7 +29,7 @@ $app->get("/test02", function(){
     print_r($zk->getAttendances());
     $zk->enable();
     $zk->disconnect();
-});
+});*/
 
 $app->group("/reloj/v1", function(\Slim\App $app){
 
@@ -46,19 +42,19 @@ $app->group("/reloj/v1", function(\Slim\App $app){
             $rows = $reloj->get();
         
             //$return["data"] = $rows;
-	    $return["message"] = "Total marcaciones descargadas: " . count($rows);
-	    
-	    $registradas = 0;
-	    if(count($rows) > 0){
-	        $data = new Data($this->db, $this->logger);
-          	foreach($rows AS $row){
-	            if(!$data->existeRegistro($row)){
-			$registradas++;
-                    	$data->insertarRegistro($row);
+            $return["message"] = "Total marcaciones descargadas: " . count($rows);
+            
+            $registradas = 0;
+            if(count($rows) > 0){
+                $data = new Data($this->db, $this->logger);
+                foreach($rows AS $row){
+                    if(!$data->existeRegistro($row)){
+                        $registradas++;
+                        $data->insertarRegistro($row);
                     }
-            	}
-	    }
-	    $return["message"] = $return["message"] . ", total marcaciones registradas: " . $registradas;
+                }
+            }
+            $return["message"] = $return["message"] . ", total marcaciones registradas: " . $registradas;
             //$reloj->clear();
             $reloj->close();
 
@@ -70,7 +66,7 @@ $app->group("/reloj/v1", function(\Slim\App $app){
             }
         }
         return $response->withJson($return);
-	//print_r($return["data"]);
+	    //print_r($return["data"]);
     });
 
     $app->get('/sync', function(Request $request, Response $response, $args) {

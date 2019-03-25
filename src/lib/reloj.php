@@ -29,7 +29,6 @@ class Reloj {
         if ($attendancedata[2] == 14){
           $status = "O";
         }
-        else
         $fechaHora = date("Y-m-d H:i:s", strtotime($attendancedata[3]));
         
         //array_push($rows, $attendancedata);
